@@ -16,60 +16,64 @@ protocol CountryDelegate: class {
 
 class MainViewController: UIViewController, CountryDelegate {
     @IBOutlet weak var countryTableview: UITableView!
-     var mainViewModel:MainViewModel?
+    var mainViewModel:MainViewModel?
     
     var selectedCountry:Country?
     var arrayCountry:[Country] = []
-    var counter:Int?
     
     let locationManager = CLLocationManager()
     let geoCoder = CLGeocoder()
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let dataBaseController = DatabaseController()
         
+        title = "Main View"
+        let dataBaseController = DatabaseController()
         mainViewModel = MainViewModel(dataBaseController: dataBaseController)
-                
+        setUpTableView()
+        mainViewModel?.getSavedCountries()
+        countryTableview.reloadData()
+        defualtLocation()
+        setAddBtn()
+    }
+    
+    func setUpTableView() {
         countryTableview.delegate = self
         countryTableview.dataSource = self
         
         countryTableview.register(UINib(nibName: String(describing: MainTableViewCell.self), bundle: nil), forCellReuseIdentifier: "MainTableViewCell")
-         self.countryTableview.estimatedRowHeight = 60
-         self.countryTableview.rowHeight = UITableView.automaticDimension
-        mainViewModel?.getSavedCountries()
-        countryTableview.reloadData()
-
-        locationManager.requestAlwaysAuthorization()
-         locationManager.delegate = self
-               if CLLocationManager.locationServicesEnabled() {
-                  
-                   locationManager.startMonitoringSignificantLocationChanges()
-               }
-        
-        setAddBtn()
-        // Do any additional setup after loading the view.
+        self.countryTableview.estimatedRowHeight = 60
+        self.countryTableview.rowHeight = UITableView.automaticDimension
+        self.countryTableview.tableFooterView = UIView()
     }
     
     func setAddBtn() {
-             let doneBtn = UIButton()
-             doneBtn.setTitle("Add", for: .normal)
-           doneBtn.tintColor = .red
-             doneBtn.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
-             doneBtn.addTarget(self, action: #selector(handleClick), for: .touchUpInside)
-             
-             self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneBtn)
-         }
-         
-         @objc func handleClick() {
-//           counter = counter + 1
+        let doneBtn = UIButton()
+        doneBtn.setTitle("Add", for: .normal)
+        doneBtn.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+        doneBtn.addTarget(self, action: #selector(handleClick), for: .touchUpInside)
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneBtn)
+    }
+    
+    @objc func handleClick() {
+        let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc: CountryVC = storyboard.instantiateViewController(withIdentifier: "CountryVC") as! CountryVC
+        vc.delegate = self
+        self.navigationController?.pushViewController(vc, animated: true)
+        
+        
+    }
+    
+    func defualtLocation() {
+        locationManager.requestAlwaysAuthorization()
+        locationManager.delegate = self
+        if CLLocationManager.locationServicesEnabled() {
             
-           let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-           let vc: CountryVC = storyboard.instantiateViewController(withIdentifier: "CountryVC") as! CountryVC
-            vc.delegate = self
-           self.navigationController?.pushViewController(vc, animated: true)
-         }
+            locationManager.startMonitoringSignificantLocationChanges()
+        }
+    }
     
     func getCountries(countryName: Country) {
         self.selectedCountry = countryName
@@ -77,34 +81,34 @@ class MainViewController: UIViewController, CountryDelegate {
         mainViewModel?.save(countryName: countryName)
         countryTableview.reloadData()
         
-       }
-
+    }
+    
 }
 
 extension MainViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return mainViewModel?.rowCount() ?? 0
-       }
-       
-       func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-          let cell = tableView.dequeueReusableCell(withIdentifier: "MainTableViewCell", for: indexPath) as! MainTableViewCell
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MainTableViewCell", for: indexPath) as! MainTableViewCell
         let country = mainViewModel!.countries[indexPath.row]
-           cell.prepareCell(model: country)
-           return cell
-       }
+        cell.prepareCell(model: country)
+        return cell
+    }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-           return UITableView.automaticDimension
-       }
+        return UITableView.automaticDimension
+    }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-      if editingStyle == .delete {
-        print("Deleted")
-let modelToRemove = mainViewModel!.countries[indexPath.row]
-        self.mainViewModel?.countries.remove(at: indexPath.row)
-        mainViewModel?.deleteCountries(countryName:modelToRemove)
-        self.countryTableview.deleteRows(at: [indexPath], with: .automatic)
-      }
+        if editingStyle == .delete {
+            print("Deleted")
+            let modelToRemove = mainViewModel!.countries[indexPath.row]
+            self.mainViewModel?.countries.remove(at: indexPath.row)
+            mainViewModel?.deleteCountries(countryName:modelToRemove)
+            self.countryTableview.deleteRows(at: [indexPath], with: .automatic)
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -119,10 +123,10 @@ let modelToRemove = mainViewModel!.countries[indexPath.row]
 }
 
 extension MainViewController:  CLLocationManagerDelegate {
-
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let currentLocation = locations.first else { return }
-
+        
         geoCoder.reverseGeocodeLocation(currentLocation) { (placemarks, error) in
             guard let currentLocPlacemark = placemarks?.first else { return }
             print(currentLocPlacemark.country ?? "No country found")

@@ -155,9 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				F4E902AC2443914700F02374 /* Cells */,
-				F4E902972442AAAD00F02374 /* CountryVC.swift */,
-				F4E902B12443AA5E00F02374 /* MainViewController.swift */,
-				F4E902BC2443CFC400F02374 /* MainDetailsViewController.swift */,
+				F4E902BE2443E1DB00F02374 /* ViewController */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -232,6 +230,16 @@
 				F4E902B52443B72C00F02374 /* DatabaseController.swift */,
 			);
 			path = Database;
+			sourceTree = "<group>";
+		};
+		F4E902BE2443E1DB00F02374 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				F4E902972442AAAD00F02374 /* CountryVC.swift */,
+				F4E902B12443AA5E00F02374 /* MainViewController.swift */,
+				F4E902BC2443CFC400F02374 /* MainDetailsViewController.swift */,
+			);
+			path = ViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

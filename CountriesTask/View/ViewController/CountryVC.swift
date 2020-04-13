@@ -8,29 +8,32 @@
 
 import UIKit
 
-
 class CountryVC: UIViewController {
-
+    
     @IBOutlet weak var searchField: UITextField!
     @IBOutlet weak var tableView:UITableView!
     
     var searchViewModel:CountryViewModel?
-     weak var delegate : CountryDelegate?
+    weak var delegate : CountryDelegate?
     
     private var networkController = CountryNetworkController()
-   
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = "Search Country"
         
         searchViewModel = CountryViewModel(networkController: networkController)
+        self.searchField.delegate = self
+        setUpTableview()
+        
+    }
+    
+    func setUpTableview() {
         tableView.register(UINib(nibName: String(describing: CountryCell.self), bundle: nil), forCellReuseIdentifier: "CountryCell")
         self.tableView.estimatedRowHeight = 60
         self.tableView.rowHeight = UITableView.automaticDimension
-        self.searchField.delegate = self
-        
+        self.tableView.tableFooterView = UIView()
     }
     
     //reload table section on orientations
@@ -47,11 +50,11 @@ extension CountryVC: UITextFieldDelegate {
             //load result from realm // do a querey
         }
         else {
-        searchViewModel?.loadCountries(name:searchKey) { (fetched) in
-            if fetched {
-                self.tableView.reloadData()
+            searchViewModel?.loadCountries(name:searchKey) { (fetched) in
+                if fetched {
+                    self.tableView.reloadData()
+                }
             }
-        }
         }
         return false
     }
@@ -67,7 +70,7 @@ extension CountryVC:UITableViewDelegate,UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         searchViewModel!.rowCount()
     }
-      
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "CountryCell", for: indexPath) as! CountryCell

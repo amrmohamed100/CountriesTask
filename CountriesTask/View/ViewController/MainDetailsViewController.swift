@@ -9,7 +9,7 @@
 import UIKit
 
 class MainDetailsViewController: UIViewController {
-
+    
     @IBOutlet weak var country: UILabel!
     @IBOutlet weak var captial: UILabel!
     @IBOutlet weak var currency: UILabel!
@@ -18,17 +18,18 @@ class MainDetailsViewController: UIViewController {
     var captialData:String?
     var currencyData:String?
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        title = "Main Details View"
+        setUpData()
+    }
+    
+    func setUpData() {
         country.text = "CountryName: "  + (countryData ?? "")
         captial.text = "CaptialName: "  + (captialData ?? "")
         currency.text = "CurrencyName: "  + (currencyData ?? "")
-
     }
     
-
+    
 }
 
