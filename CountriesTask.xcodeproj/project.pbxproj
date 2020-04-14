@@ -10,6 +10,8 @@
 		DA0E5BB335924A46692DA085 /* Pods_CountriesTask.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EC906C2A09F868858046491 /* Pods_CountriesTask.framework */; };
 		F4E221042445B7DA006B1495 /* CountryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4E221032445B7DA006B1495 /* CountryCell.swift */; };
 		F4E221082445B7DA006B1495 /* MainTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4E221062445B7DA006B1495 /* MainTableViewCell.swift */; };
+		F4E221142445BD8B006B1495 /* CountryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4E221132445BD8B006B1495 /* CountryCell.xib */; };
+		F4E221162445BDB1006B1495 /* MainTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4E221152445BDB1006B1495 /* MainTableViewCell.xib */; };
 		F4E9027C2442A77900F02374 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4E9027B2442A77900F02374 /* AppDelegate.swift */; };
 		F4E9027E2442A77900F02374 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4E9027D2442A77900F02374 /* SceneDelegate.swift */; };
 		F4E902802442A77900F02374 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4E9027F2442A77900F02374 /* ViewController.swift */; };
@@ -38,8 +40,8 @@
 		81448A4FCE8D4B482157F55B /* Pods-CountriesTask.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CountriesTask.release.xcconfig"; path = "Target Support Files/Pods-CountriesTask/Pods-CountriesTask.release.xcconfig"; sourceTree = "<group>"; };
 		F4E221032445B7DA006B1495 /* CountryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CountryCell.swift; path = CountriesTask/View/CountryCell.swift; sourceTree = SOURCE_ROOT; };
 		F4E221062445B7DA006B1495 /* MainTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MainTableViewCell.swift; path = CountriesTask/View/MainTableViewCell.swift; sourceTree = SOURCE_ROOT; };
-		F4E221112445BCAF006B1495 /* MainTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainTableViewCell.xib; sourceTree = "<group>"; };
-		F4E221122445BCB0006B1495 /* CountryCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CountryCell.xib; sourceTree = "<group>"; };
+		F4E221132445BD8B006B1495 /* CountryCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CountryCell.xib; sourceTree = "<group>"; };
+		F4E221152445BDB1006B1495 /* MainTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainTableViewCell.xib; sourceTree = "<group>"; };
 		F4E902782442A77900F02374 /* CountriesTask.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CountriesTask.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4E9027B2442A77900F02374 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F4E9027D2442A77900F02374 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -215,8 +217,8 @@
 			children = (
 				F4E221062445B7DA006B1495 /* MainTableViewCell.swift */,
 				F4E221032445B7DA006B1495 /* CountryCell.swift */,
-				F4E221122445BCB0006B1495 /* CountryCell.xib */,
-				F4E221112445BCAF006B1495 /* MainTableViewCell.xib */,
+				F4E221132445BD8B006B1495 /* CountryCell.xib */,
+				F4E221152445BDB1006B1495 /* MainTableViewCell.xib */,
 			);
 			name = Cells;
 			path = ../../../../Downloads/Countries/Countries/View/Search/Views/Cells;
@@ -300,9 +302,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F4E221142445BD8B006B1495 /* CountryCell.xib in Resources */,
 				F4E902882442A77F00F02374 /* LaunchScreen.storyboard in Resources */,
 				F4E902852442A77F00F02374 /* Assets.xcassets in Resources */,
 				F4E902832442A77900F02374 /* Main.storyboard in Resources */,
+				F4E221162445BDB1006B1495 /* MainTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
