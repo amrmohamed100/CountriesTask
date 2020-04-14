@@ -25,6 +25,7 @@ class CountryVC: UIViewController {
         
         searchViewModel = CountryViewModel(networkController: networkController)
         self.searchField.delegate = self
+        searchField.addTarget(self, action: #selector(searchRecords(_ :)), for: .editingChanged)
         setUpTableview()
         
     }
@@ -43,21 +44,44 @@ class CountryVC: UIViewController {
 }
 
 extension CountryVC: UITextFieldDelegate {
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        searchViewModel?.loadCountries(name:textField.text ?? "") { (fetched) in
+                            if fetched {
+                                self.tableView.reloadData()
+                            }
+                        }
+        return true
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        let searchKey = textField.text ?? ""
-        
-        if searchKey.isEmpty {
-            //load result from realm // do a querey
-        }
-        else {
-            searchViewModel?.loadCountries(name:searchKey) { (fetched) in
-                if fetched {
-                    self.tableView.reloadData()
-                }
-            }
-        }
+       searchViewModel?.loadCountries(name:textField.text ?? "") { (fetched) in
+                     if fetched {
+                         self.tableView.reloadData()
+                     }
+                 }
         return false
     }
+    
+    @objc func searchRecords(_ textField: UITextField) {
+        self.searchViewModel?.countries?.removeAll()
+          if textField.text?.count != 0 {
+            for country in searchViewModel!.originalCountriesList {
+                  if let countryToSearch = textField.text{
+                    let range = country.capital!.lowercased().range(of: countryToSearch, options: .caseInsensitive, range: nil, locale: nil)
+                      if range != nil {
+                        self.searchViewModel?.countries?.append(country)
+                      }
+                  }
+              }
+          } else {
+            for country in searchViewModel!.originalCountriesList {
+                searchViewModel?.countries?.append(country)
+              }
+          }
+          
+        self.tableView.reloadData()
+      }
 }
 
 extension CountryVC:UITableViewDelegate,UITableViewDataSource {

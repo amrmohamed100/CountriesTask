@@ -17,6 +17,8 @@ protocol CountryDelegate: class {
 class MainViewController: UIViewController, CountryDelegate {
     @IBOutlet weak var countryTableview: UITableView!
     var mainViewModel:MainViewModel?
+    var searchViewModel:CountryViewModel?
+    private var networkController = CountryNetworkController()
     
     var selectedCountry:Country?
     var arrayCountry:[Country] = []
@@ -31,11 +33,13 @@ class MainViewController: UIViewController, CountryDelegate {
         title = "Main View"
         let dataBaseController = DatabaseController()
         mainViewModel = MainViewModel(dataBaseController: dataBaseController)
+        searchViewModel = CountryViewModel(networkController: networkController)
         setUpTableView()
         mainViewModel?.getSavedCountries()
         countryTableview.reloadData()
         defualtLocation()
         setAddBtn()
+        locationNotAccess()
     }
     
     func setUpTableView() {
@@ -73,6 +77,20 @@ class MainViewController: UIViewController, CountryDelegate {
             
             locationManager.startMonitoringSignificantLocationChanges()
         }
+    }
+    
+    
+    func locationNotAccess()  {
+
+        if CLLocationManager.authorizationStatus() == .denied  {
+            
+                self.searchViewModel?.loadCountries(name:"Egypt") { (fetched) in
+                    if fetched {
+                        self.mainViewModel?.countries.append( (self.searchViewModel?.countries?.first)!)
+                        self.countryTableview.reloadData()
+                    }
+            }
+            }
     }
     
     func getCountries(countryName: Country) {
@@ -127,14 +145,19 @@ extension MainViewController:  CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let currentLocation = locations.first else { return }
         
-        geoCoder.reverseGeocodeLocation(currentLocation) { (placemarks, error) in
-            guard let currentLocPlacemark = placemarks?.first else { return }
-            print(currentLocPlacemark.country ?? "No country found")
-            print(currentLocPlacemark.isoCountryCode ?? "No country code found")
-            let country = Country()
-            country.name  = currentLocPlacemark.country
-            self.mainViewModel?.countries.append(country)
-            self.countryTableview.reloadData()
-        }
+  
+                geoCoder.reverseGeocodeLocation(currentLocation) { (placemarks, error) in
+                    guard let currentLocPlacemark = placemarks?.first else { return }
+                    print(currentLocPlacemark.country ?? "No country found")
+                    print(currentLocPlacemark.isoCountryCode ?? "No country code found")
+                    self.searchViewModel?.loadCountries(name:currentLocPlacemark.country!) { (fetched) in
+                        if fetched {
+                            self.mainViewModel?.countries.append( (self.searchViewModel?.countries?.first)!)
+                            self.countryTableview.reloadData()
+                        }
+                    }
+                    
+                    
+                }
     }
 }

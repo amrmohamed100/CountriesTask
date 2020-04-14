@@ -9,8 +9,9 @@
 import UIKit
 
 class CountryViewModel: NSObject {
-
+    
     var countries: [Country]?
+    var originalCountriesList:[Country] = []
     private var networkController:CountryNetworkController
     var collapsed: Bool = true
     
@@ -23,6 +24,11 @@ class CountryViewModel: NSObject {
         networkController.getCountries(with: name) { (countries) in
             if countries != nil {
                 self.countries = countries
+                
+                for country in countries! {
+                    self.originalCountriesList.append(country)
+                }
+                
                 callback(true)
             }else{
                 return callback(false)
